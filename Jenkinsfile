@@ -22,7 +22,9 @@ pipeline {
         }
         stage ('Build') {
             steps {
-                sh 'mvn clean package' 
+                dir("code") {
+                sh 'mvn clean package'
+                }
             }
         }
         stage ('Copy Package') {
@@ -41,9 +43,11 @@ pipeline {
         }
         stage ('Deploy') {
             steps {
+                dir("opscode"){
                 sh 'terraform init' 
                 sh 'terraform plan -out=plan'
                 sh 'terraform apply plan'
+                }
             }
         }
     }
